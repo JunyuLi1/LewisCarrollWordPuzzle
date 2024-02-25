@@ -1,7 +1,11 @@
 #ifndef __PROJ5_PRIORITY_QUEUE_HPP
 #define __PROJ5_PRIORITY_QUEUE_HPP
 
+#include <array>
 #include <cstddef>
+#include <stdexcept>
+#include <type_traits>
+#include <vector>
 
 namespace shindler::ics46::project5 {
 
@@ -9,6 +13,7 @@ template <typename T>
 class PriorityQueue {
    private:
     // fill in private member data here
+    std::vector<T> min_heap;
 
    public:
      PriorityQueue();
@@ -56,30 +61,70 @@ PriorityQueue<T>::~PriorityQueue() {
 
 template <typename T>
 size_t PriorityQueue<T>::size() const noexcept {
-    // TODO: Implement this
-    return {};
+    return min_heap.size();
 }
 
 template <typename T>
 bool PriorityQueue<T>::empty() const noexcept {
-    // TODO: Implement this
-    return {};
+    return min_heap.empty();
 }
 
 template <typename T>
 void PriorityQueue<T>::push(const T& elem) {
-    // TODO: Implement this
+    min_heap.push_back(elem);
+    size_t node_index = size()-1;
+    while(node_index>0)
+    {
+        size_t paraent_index = (node_index-1) /2;
+        if(min_heap[node_index]<min_heap[paraent_index]){
+            std::swap(min_heap[node_index], min_heap[paraent_index]);
+            node_index = paraent_index;
+        }
+        else {
+            break;
+        }
+    }
 }
 
 template <typename T>
 const T& PriorityQueue<T>::min() const {
-    // TODO: Implement this
-    return {};
+    if(empty())
+    {
+        throw std::out_of_range("Queue is empty");
+    }
+    return min_heap[0];
 }
 
 template <typename T>
 void PriorityQueue<T>::popMin() {
-    // TODO: Implement this
+    if(empty())
+    {
+        throw std::out_of_range("Queue is empty");
+    }
+    std::swap(min_heap[0],min_heap[min_heap.size()-1]);
+    min_heap.pop_back();
+    size_t node_index = 0;
+    size_t child_index = 2 * node_index +1;
+    T value = min_heap[node_index];
+    while(child_index < size())
+    {
+        T min_value = value;
+        auto min_index = -1;
+        for(size_t i=0; i<2 && i+ child_index < size(); i++)
+        {
+            if(min_heap[i+child_index] < min_value)
+            {
+                min_value = min_heap[i+child_index];
+                min_index = i + child_index;
+            }
+        }
+        if(min_value == value){
+            break;
+        }
+        std::swap(min_heap[node_index], min_heap[min_index]);
+        node_index = min_index;
+        child_index = 2 * node_index + 1;
+    }
 }
 
 }  // namespace shindler::ics46::project5

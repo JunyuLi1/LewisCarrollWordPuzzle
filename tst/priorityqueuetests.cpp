@@ -34,4 +34,19 @@ TEST_CASE("PriorityQueue:CreateWithInsert3,2:ExpectFront2",
 }
 // NOLINTEND
 
+TEST_CASE("simpleminheap",
+          "[Required][PriorityQueue]") {
+    proj5::PriorityQueue<int> pqueue;
+    pqueue.push(16);
+    pqueue.push(18);
+    pqueue.push(34);
+    pqueue.push(62);
+    pqueue.push(21);
+    pqueue.push(4);
+    REQUIRE(pqueue.min() == 4);
+    REQUIRE(pqueue.size()==6);
+    pqueue.popMin();
+    REQUIRE(pqueue.min()==16);
+}
+
 }  // namespace
