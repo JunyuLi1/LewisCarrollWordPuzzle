@@ -49,4 +49,28 @@ TEST_CASE("simpleminheap",
     REQUIRE(pqueue.min()==16);
 }
 
+TEST_CASE("PriorityQueue:Need to percolate up and down:ExpectFront2",
+          "[Required][PriorityQueue]") {
+    proj5::PriorityQueue<int> pqueue;
+    pqueue.push(3);
+    pqueue.push(2);
+    pqueue.push(1);
+    pqueue.push(5);
+    pqueue.push(11);
+    pqueue.push(1);
+    pqueue.push(9);
+    pqueue.push(1);
+    pqueue.push(30);
+    pqueue.push(1);
+    REQUIRE(pqueue.min() == 1);
+    pqueue.popMin();
+    REQUIRE(pqueue.min() == 1);
+    pqueue.popMin();
+    pqueue.popMin();
+    REQUIRE(pqueue.min() == 1);
+    pqueue.popMin();
+    pqueue.popMin();
+    REQUIRE(pqueue.min() == 3);
+}
+
 }  // namespace
